@@ -47,6 +47,9 @@ relic_t double_crit_m = 2 << CR | 2 << CD;
 relic_t spd_m = 2 << SPD;
 relic_t spd_ehr_m = spd_m | 2 << EHR;
 relic_t spd_atk_m = spd_m | 2 << ATK_P;
+relic_t spd_defp_m = spd_m | 2 << DEF_P;
+relic_t spd_hpp_m = spd_m | 2 << HP_P;
+relic_t spd_be_m = spd_m | 2 << BREAK;
 relic_t spd_atk_ehr_m = spd_atk_m | 2 << EHR;
 relic_t atk_m = 2 << ATK_P;
 relic_t ehr_m = 2 << EHR;
@@ -69,9 +72,17 @@ void analize(relic_t* relics, int n){
   int double_crit_atk = 0;
   int double_crit_ehr = 0;
   int double_crit_atk_ehr = 0;
+  int spd = 0;
+  int spd_be = 0;
+  int spd_hpp = 0;
+  int spd_defp = 0;
 
   for(int i = 0; i < n; i++){
     int relic = relics[i];
+    if ((relic & spd_m) == spd_m) spd++;
+    if ((relic & spd_hpp_m) == spd_hpp_m) spd_hpp++;
+    if ((relic & spd_defp_m) == spd_defp_m) spd_defp++;
+    if ((relic & spd_be_m) == spd_be_m) spd_be++;
     if(((relic & double_crit_m) != double_crit_m) &&
         relic & (2 << CR | 2 << CD)){
       single_crit++;
@@ -108,7 +119,11 @@ void analize(relic_t* relics, int n){
     << "with spd & ehr: " << (double) double_crit_spd_ehr / n << endl
     << "with atk: " << (double) double_crit_atk / n << endl
     << "with ehr: " << (double) double_crit_ehr / n << endl
-    << "with atk & ehr: " << (double) double_crit_atk_ehr / n << endl;
+    << "with atk & ehr: " << (double) double_crit_atk_ehr / n << endl
+    << "spd: " << (double) spd / n << endl
+    << "spd be: " << (double) spd_be / n << endl
+    << "spd defp: " << (double) spd_defp / n << endl
+    << "spd hpp: " << (double) spd_hpp / n << endl;
   
   free(relics);
 }
